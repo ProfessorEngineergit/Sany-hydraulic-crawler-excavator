@@ -216,12 +216,13 @@ export class UIManager {
     const toShow = filter === 'all' ? levels : levels.filter(l => l.difficulty === filter);
 
     toShow.forEach(level => {
+      const isLocked = level.unlocked === false;
       const card = document.createElement('div');
-      card.className = `level-card ${level.locked ? 'locked' : ''} ${level.completed ? 'completed' : ''}`;
+      card.className = `level-card ${isLocked ? 'locked' : ''} ${level.completed ? 'completed' : ''}`;
       card.dataset.levelId = level.id;
 
       const icon  = level.completed ? '<span class="card-check">✓</span>' :
-                    level.locked    ? '<span class="card-lock">🔒</span>' : '';
+                    isLocked        ? '<span class="card-lock">🔒</span>' : '';
 
       card.innerHTML = `
         <div class="card-num">LEVEL ${String(level.id).padStart(2, '0')}</div>
@@ -235,7 +236,7 @@ export class UIManager {
         </div>
       `;
 
-      if (!level.locked) {
+      if (!isLocked) {
         card.addEventListener('click', () => {
           this.hideLevelSelect();
           this._emit('levelSelect', level.id);
