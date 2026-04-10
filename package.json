@@ -1,0 +1,17 @@
+{
+  "name": "sany-sy265c9c6k-simulator",
+  "version": "1.0.0",
+  "description": "Hyperrealistic 3D training simulator for the Sany SY265C9C6K hydraulic crawler excavator",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.162.0"
+  },
+  "devDependencies": {
+    "vite": "^5.1.0"
+  }
+}
