@@ -76,6 +76,12 @@ npm run build    # Production build → dist/
 npm run preview  # Preview production build
 ```
 
+### GitHub Pages
+
+Do not publish the raw repository source as a static site. This project must be built first so browser-safe bundled assets from `dist/` are served.
+
+This repository includes a Pages workflow that builds and deploys `dist/` from `main`.
+
 ---
 
 ## Architecture
