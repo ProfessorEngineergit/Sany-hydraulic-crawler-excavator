@@ -29,16 +29,16 @@ class App {
     this.ui      = new UIManager(this.levels);
 
     /* ── Wire events ──────────────────────────────────────────── */
-    this.ui.on('levelSelect', id => this._startLevel(id));
-    this.ui.on('resume',      ()  => { this._paused = false; });
-    this.ui.on('pause',       ()  => { this._paused = true;  });
-    this.ui.on('restart',     ()  => { if (this._level) this._startLevel(this._level.id); });
-    this.ui.on('nextLevel',   ()  => {
-      if (this._level && this._level.id < 20) {
-        this._startLevel(this._level.id + 1);
+    this.ui.on('levelSelect', id => {
+      if (id !== undefined) {
+        /* A specific level was chosen from the grid */
+        this._startLevel(id);
+      } else {
+        /* Return to level select (from pause / complete screens) */
+        this._active = false;
+        this.ui.showLevelSelect();
       }
     });
-    this.ui.on('levelSelect', () => { this._active = false; this.ui.showLevelSelect(); });
 
     this.levels.on('levelComplete', id => {
       /* Handled inline in loop */

@@ -118,7 +118,7 @@ export const LEVELS = [
         'Machine pivots around the left (stationary) track',
         'Counter-rotate: one track forward + other track backward = spin on the spot',
       ],
-      controlsHighlight: ['I', 'K'],
+      controlsHighlight: [],
     },
     objective: { primary: 'Drive the right track to rotate the machine 180° in the opposite direction', secondary: null },
     task: { type: 'travel', target: { swingBody: false, travelAngle: -Math.PI } },

@@ -61,8 +61,9 @@ export class InputManager {
 
     return {
       // ── Travel (foot levers / pedals) ──────────────────────────
-      travelForward:   this.isDown('KeyW') || this.isDown('ArrowUp')    || gpBtn(12),
-      travelBack:      this.isDown('KeyS') || this.isDown('ArrowDown')  || gpBtn(13),
+      // W/S/A/D/Q/E drive the tracks — Arrow keys are reserved for work equipment
+      travelForward:   this.isDown('KeyW') || gpBtn(12),
+      travelBack:      this.isDown('KeyS') || gpBtn(13),
       turnLeft:        this.isDown('KeyA')  || gpBtn(14),
       turnRight:       this.isDown('KeyD')  || gpBtn(15),
       counterRotLeft:  this.isDown('KeyQ'),
