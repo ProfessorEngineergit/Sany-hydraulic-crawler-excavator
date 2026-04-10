@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Sany SY265C9C6K — Hydraulic Crawler Excavator Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+
+  <!-- Three.js canvas is injected here by main.js -->
+  <div id="canvas-container"></div>
+
+  <!-- ═══════════════════════════════════════════════
+       LOADING SCREEN
+  ═══════════════════════════════════════════════ -->
+  <div id="loading-screen">
+    <div class="loading-content">
+      <div class="sany-logo">
+        <span class="sany-wordmark">SANY</span>
+        <span class="sany-tagline">Excellence & Reliability</span>
+      </div>
+      <div class="model-badge">SY265C9C6K</div>
+      <div class="loading-bar-wrap">
+        <div class="loading-bar" id="loading-bar"></div>
+      </div>
+      <p class="loading-text" id="loading-text">Initialising simulator…</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       LEVEL SELECTOR
+  ═══════════════════════════════════════════════ -->
+  <div id="level-select" class="ui-overlay hidden">
+    <header class="ls-header">
+      <div class="ls-title-block">
+        <span class="ls-brand">SANY SY265C9C6K</span>
+        <h1 class="ls-title">Operator Training Simulator</h1>
+        <p class="ls-subtitle">26,500 kg · Hydraulic Crawler Excavator · <span id="ls-pattern-text">SAE</span> Control Pattern</p>
+      </div>
+      <button id="ls-controls-btn" class="btn-ghost">Controls Reference</button>
+    </header>
+
+    <div class="ls-filters">
+      <button class="ls-filter active" data-filter="all">All Levels</button>
+      <button class="ls-filter" data-filter="beginner">Beginner</button>
+      <button class="ls-filter" data-filter="intermediate">Intermediate</button>
+      <button class="ls-filter" data-filter="advanced">Advanced</button>
+      <button class="ls-filter" data-filter="expert">Expert</button>
+    </div>
+
+    <div class="ls-grid" id="ls-grid">
+      <!-- Level cards injected by UIManager -->
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       CONTROLS REFERENCE PANEL
+  ═══════════════════════════════════════════════ -->
+  <div id="controls-ref" class="ui-overlay hidden">
+    <div class="ref-card">
+      <div class="ref-header">
+        <div>
+          <div class="ref-manual-badge">SANY SY265C9C6K · Operator Manual</div>
+          <h2>Chapter 4 — Machine Controls</h2>
+          <p class="ref-page">Pages 4-1 to 4-12</p>
+        </div>
+        <button class="btn-close" id="close-controls-ref">✕</button>
+      </div>
+      <div class="ref-body">
+        <div class="pattern-switch">
+          <span class="pattern-switch-label">Control Pattern</span>
+          <div class="pattern-switch-buttons">
+            <button id="pattern-sae-btn" class="pattern-btn active">SAE</button>
+            <button id="pattern-bhl-btn" class="pattern-btn">BHL</button>
+          </div>
+        </div>
+        <div class="ref-section">
+          <h3 id="controls-pattern-title">SAE Control Pattern (Standard)</h3>
+          <div class="control-grid">
+            <div class="control-joystick">
+              <div class="joy-label">LEFT JOYSTICK</div>
+              <div class="joy-diagram">
+                <div class="joy-dir joy-up"><span id="ctrl-left-up-action">ARM OUT</span><br/><kbd>↑</kbd></div>
+                <div class="joy-dir joy-down"><span id="ctrl-left-down-action">ARM IN</span><br/><kbd>↓</kbd></div>
+                <div class="joy-dir joy-left"><span id="ctrl-left-left-action">SWING L</span><br/><kbd>←</kbd></div>
+                <div class="joy-dir joy-right"><span id="ctrl-left-right-action">SWING R</span><br/><kbd>→</kbd></div>
+                <div class="joy-center"></div>
+              </div>
+            </div>
+            <div class="control-joystick">
+              <div class="joy-label">RIGHT JOYSTICK</div>
+              <div class="joy-diagram">
+                <div class="joy-dir joy-up"><span id="ctrl-right-up-action">BOOM UP</span><br/><kbd>I</kbd></div>
+                <div class="joy-dir joy-down"><span id="ctrl-right-down-action">BOOM DN</span><br/><kbd>K</kbd></div>
+                <div class="joy-dir joy-left"><span id="ctrl-right-left-action">BKT DUMP</span><br/><kbd>J</kbd></div>
+                <div class="joy-dir joy-right"><span id="ctrl-right-right-action">BKT CURL</span><br/><kbd>L</kbd></div>
+                <div class="joy-center"></div>
+              </div>
+            </div>
+            <div class="control-travel">
+              <div class="joy-label">TRAVEL (FOOT PEDALS)</div>
+              <div class="travel-keys">
+                <div class="travel-row">
+                  <kbd>W</kbd><span>Both tracks forward</span>
+                </div>
+                <div class="travel-row">
+                  <kbd>S</kbd><span>Both tracks reverse</span>
+                </div>
+                <div class="travel-row">
+                  <kbd>A</kbd><span>Pivot turn left</span>
+                </div>
+                <div class="travel-row">
+                  <kbd>D</kbd><span>Pivot turn right</span>
+                </div>
+                <div class="travel-row">
+                  <kbd>Q</kbd><span>Counter-rotate left</span>
+                </div>
+                <div class="travel-row">
+                  <kbd>E</kbd><span>Counter-rotate right</span>
+                </div>
+              </div>
+            </div>
+            <div class="control-misc">
+              <div class="joy-label">OTHER</div>
+              <div class="travel-keys">
+                <div class="travel-row">
+                  <kbd>C</kbd><span>Toggle camera view</span>
+                </div>
+                <div class="travel-row">
+                  <kbd>P</kbd><span>Toggle SAE / BHL pattern</span>
+                </div>
+                <div class="travel-row">
+                  <kbd>H</kbd><span>Horn</span>
+                </div>
+                <div class="travel-row">
+                  <kbd>ESC</kbd><span>Menu / Pause</span>
+                </div>
+                <div class="travel-row">
+                  <kbd>Mouse</kbd><span>Orbit camera</span>
+                </div>
+                <div class="travel-row">
+                  <kbd>Scroll</kbd><span>Zoom camera</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ref-note">
+          <strong>Note:</strong> <span id="controls-pattern-note">The Sany SY265C9C6K uses the SAE (Society of Automotive Engineers) control pattern as standard. 
+          ISO/BHL pattern can be selected via the machine's monitor — Section 4.1, Page 4-2.</span>
+        </div>
+      </div>
+      <div class="ref-footer">
+        <button class="btn-primary" id="close-controls-ref-2">Got it — Let's operate!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       TUTORIAL POP-UP
+  ═══════════════════════════════════════════════ -->
+  <div id="tutorial-popup" class="hidden">
+    <div class="tut-card">
+      <div class="tut-header">
+        <div class="tut-manual-badge" id="tut-manual-ref">SANY SY265C9C6K · Operator Manual</div>
+        <button class="btn-close" id="tut-close">✕</button>
+      </div>
+      <h2 class="tut-title" id="tut-title"></h2>
+      <div class="tut-body" id="tut-body"></div>
+      <div class="tut-keypoints" id="tut-keypoints"></div>
+      <div class="tut-controls-highlight" id="tut-controls-highlight"></div>
+      <div class="tut-footer">
+        <label class="tut-skip-label">
+          <input type="checkbox" id="tut-skip-future" /> Don't show tutorials for future levels
+        </label>
+        <div class="tut-btns">
+          <button class="btn-ghost" id="tut-skip-btn">Skip</button>
+          <button class="btn-primary" id="tut-ok-btn">Start Operating</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       IN-GAME HUD
+  ═══════════════════════════════════════════════ -->
+  <div id="hud" class="hidden">
+
+    <!-- Top bar -->
+    <div class="hud-topbar">
+      <button class="hud-menu-btn" id="hud-menu-btn">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="hud-level-info">
+        <span class="hud-level-num" id="hud-level-num">Level 1</span>
+        <span class="hud-level-name" id="hud-level-name">Meet the Machine</span>
+      </div>
+      <div class="hud-objective">
+        <span class="hud-obj-label">OBJECTIVE</span>
+        <span class="hud-obj-text" id="hud-obj-text"></span>
+      </div>
+    </div>
+
+    <!-- Bottom-left: machine telemetry -->
+    <div class="hud-telemetry">
+      <div class="tele-item">
+        <span class="tele-label">DIG DEPTH</span>
+        <span class="tele-value" id="tele-depth">0.00 m</span>
+      </div>
+      <div class="tele-item">
+        <span class="tele-label">BOOM ANGLE</span>
+        <span class="tele-value" id="tele-boom">0°</span>
+      </div>
+      <div class="tele-item">
+        <span class="tele-label">SWING</span>
+        <span class="tele-value" id="tele-swing">0°</span>
+      </div>
+      <div class="tele-item">
+        <span class="tele-label">REACH</span>
+        <span class="tele-value" id="tele-reach">0.00 m</span>
+      </div>
+    </div>
+
+    <!-- Bottom-center: virtual joystick display -->
+    <div class="hud-joysticks">
+      <div class="vjoy" id="vjoy-left">
+        <div class="vjoy-label">LEFT JOY</div>
+        <div class="vjoy-ring">
+          <div class="vjoy-dot" id="vjoy-left-dot"></div>
+        </div>
+        <div class="vjoy-axes">
+          <span id="vjoy-left-h">SWING</span>
+          <span id="vjoy-left-v">ARM</span>
+        </div>
+      </div>
+      <div class="vjoy" id="vjoy-right">
+        <div class="vjoy-label">RIGHT JOY</div>
+        <div class="vjoy-ring">
+          <div class="vjoy-dot" id="vjoy-right-dot"></div>
+        </div>
+        <div class="vjoy-axes">
+          <span id="vjoy-right-h">BKT</span>
+          <span id="vjoy-right-v">BOOM</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom-right: task progress -->
+    <div class="hud-progress">
+      <div class="hud-progress-label" id="hud-progress-label">TASK PROGRESS</div>
+      <div class="hud-progress-bar-wrap">
+        <div class="hud-progress-bar" id="hud-progress-bar" style="width:0%"></div>
+      </div>
+      <div class="hud-progress-val" id="hud-progress-val">0%</div>
+    </div>
+
+    <!-- Right: Sany ICF Display Panel -->
+    <div class="hud-display-panel" id="hud-display-panel">
+      <div class="dp-header">
+        <span class="dp-brand">SANY</span>
+        <span class="dp-model">SY265C9C6K</span>
+      </div>
+      <div class="dp-row">
+        <span class="dp-key">MODE</span>
+        <span class="dp-val" id="dp-mode">S</span>
+      </div>
+      <div class="dp-row">
+        <span class="dp-key">RPM</span>
+        <span class="dp-val" id="dp-rpm">1800</span>
+      </div>
+      <div class="dp-row">
+        <span class="dp-key">HYD TEMP</span>
+        <span class="dp-val" id="dp-hydtemp">45°C</span>
+      </div>
+      <div class="dp-row">
+        <span class="dp-key">FUEL</span>
+        <div class="dp-fuel-bar">
+          <div class="dp-fuel-fill" id="dp-fuel-fill" style="width:80%"></div>
+        </div>
+      </div>
+      <div class="dp-row">
+        <span class="dp-key">LOAD</span>
+        <span class="dp-val" id="dp-load">—</span>
+      </div>
+      <div class="dp-row dp-warn" id="dp-warn" style="display:none">
+        <span>⚠ CAUTION</span>
+      </div>
+    </div>
+
+    <!-- Mini-map for digging tasks -->
+    <div class="hud-minimap hidden" id="hud-minimap">
+      <div class="minimap-label">TARGET ZONE</div>
+      <canvas id="minimap-canvas" width="120" height="120"></canvas>
+      <div class="minimap-pct" id="minimap-pct">0%</div>
+    </div>
+
+    <!-- Hint bubble -->
+    <div class="hud-hint hidden" id="hud-hint">
+      <span class="hint-icon">💡</span>
+      <span id="hud-hint-text"></span>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PAUSE MENU
+  ═══════════════════════════════════════════════ -->
+  <div id="pause-menu" class="ui-overlay hidden">
+    <div class="pause-card">
+      <h2>Paused</h2>
+      <p class="pause-level-name" id="pause-level-name"></p>
+      <div class="pause-btns">
+        <button class="btn-primary" id="pause-resume">Resume</button>
+        <button class="btn-secondary" id="pause-restart">Restart Level</button>
+        <button class="btn-ghost" id="pause-controls">Controls Reference</button>
+        <button class="btn-danger" id="pause-menu-btn">Level Select</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       LEVEL COMPLETE
+  ═══════════════════════════════════════════════ -->
+  <div id="level-complete" class="ui-overlay hidden">
+    <div class="complete-card">
+      <div class="complete-icon">🏆</div>
+      <h2 class="complete-title" id="complete-title">Level Complete!</h2>
+      <p class="complete-desc" id="complete-desc"></p>
+      <div class="complete-stats" id="complete-stats"></div>
+      <div class="complete-tip" id="complete-tip"></div>
+      <div class="complete-btns">
+        <button class="btn-ghost" id="complete-menu">Level Select</button>
+        <button class="btn-primary" id="complete-next">Next Level →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       CONTEXT TOOLTIP (part labels on hover)
+  ═══════════════════════════════════════════════ -->
+  <div id="part-tooltip" class="hidden">
+    <div class="tooltip-inner">
+      <span class="tooltip-name" id="tooltip-name"></span>
+      <span class="tooltip-desc" id="tooltip-desc"></span>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
