@@ -20,10 +20,23 @@ export class UIManager {
       lsGrid:           document.getElementById('ls-grid'),
       lsFilters:        document.querySelectorAll('.ls-filter'),
       lsControlsBtn:    document.getElementById('ls-controls-btn'),
+      lsPatternText:    document.getElementById('ls-pattern-text'),
 
       controlsRef:      document.getElementById('controls-ref'),
       closeCtrlRef:     document.getElementById('close-controls-ref'),
       closeCtrlRef2:    document.getElementById('close-controls-ref-2'),
+      patternSAEBtn:    document.getElementById('pattern-sae-btn'),
+      patternBHLBtn:    document.getElementById('pattern-bhl-btn'),
+      controlsPatternTitle: document.getElementById('controls-pattern-title'),
+      controlsPatternNote: document.getElementById('controls-pattern-note'),
+      ctrlLeftUpAction: document.getElementById('ctrl-left-up-action'),
+      ctrlLeftDownAction: document.getElementById('ctrl-left-down-action'),
+      ctrlLeftLeftAction: document.getElementById('ctrl-left-left-action'),
+      ctrlLeftRightAction: document.getElementById('ctrl-left-right-action'),
+      ctrlRightUpAction: document.getElementById('ctrl-right-up-action'),
+      ctrlRightDownAction: document.getElementById('ctrl-right-down-action'),
+      ctrlRightLeftAction: document.getElementById('ctrl-right-left-action'),
+      ctrlRightRightAction: document.getElementById('ctrl-right-right-action'),
 
       tutPopup:         document.getElementById('tutorial-popup'),
       tutManualRef:     document.getElementById('tut-manual-ref'),
@@ -93,6 +106,7 @@ export class UIManager {
     };
 
     this._bindEvents();
+    this.setControlPattern('SAE');
   }
 
   /* ── Event System ─────────────────────────────────────────── */
@@ -123,6 +137,8 @@ export class UIManager {
     /* Controls ref */
     e.closeCtrlRef?.addEventListener('click',  () => this.hideControlsRef());
     e.closeCtrlRef2?.addEventListener('click', () => this.hideControlsRef());
+    e.patternSAEBtn?.addEventListener('click', () => this._emit('controlPatternChange', 'SAE'));
+    e.patternBHLBtn?.addEventListener('click', () => this._emit('controlPatternChange', 'BHL'));
 
     /* Tutorial */
     e.tutClose?.addEventListener('click',   () => this._emitTutorialDone());
@@ -237,6 +253,43 @@ export class UIManager {
 
   hideControlsRef() {
     this._els.controlsRef.classList.add('hidden');
+  }
+
+  setControlPattern(pattern) {
+    this._controlPattern = pattern === 'BHL' ? 'BHL' : 'SAE';
+    const e = this._els;
+    const isSAE = this._controlPattern === 'SAE';
+
+    e.patternSAEBtn?.classList.toggle('active', isSAE);
+    e.patternBHLBtn?.classList.toggle('active', !isSAE);
+
+    if (e.lsPatternText) e.lsPatternText.textContent = this._controlPattern;
+    if (e.controlsPatternTitle) {
+      e.controlsPatternTitle.textContent = isSAE
+        ? 'SAE Control Pattern (Standard)'
+        : 'BHL Control Pattern (Alternative)';
+    }
+
+    if (e.ctrlLeftUpAction) e.ctrlLeftUpAction.textContent = isSAE ? 'ARM OUT' : 'BOOM UP';
+    if (e.ctrlLeftDownAction) e.ctrlLeftDownAction.textContent = isSAE ? 'ARM IN' : 'BOOM DN';
+    if (e.ctrlLeftLeftAction) e.ctrlLeftLeftAction.textContent = 'SWING L';
+    if (e.ctrlLeftRightAction) e.ctrlLeftRightAction.textContent = 'SWING R';
+
+    if (e.ctrlRightUpAction) e.ctrlRightUpAction.textContent = isSAE ? 'BOOM UP' : 'ARM OUT';
+    if (e.ctrlRightDownAction) e.ctrlRightDownAction.textContent = isSAE ? 'BOOM DN' : 'ARM IN';
+    if (e.ctrlRightLeftAction) e.ctrlRightLeftAction.textContent = 'BKT DUMP';
+    if (e.ctrlRightRightAction) e.ctrlRightRightAction.textContent = 'BKT CURL';
+
+    if (e.controlsPatternNote) {
+      e.controlsPatternNote.textContent = isSAE
+        ? 'The Sany SY265C9C6K uses the SAE (Society of Automotive Engineers) control pattern as standard. ISO/BHL pattern can be selected via the machine monitor — Section 4.1, Page 4-2.'
+        : 'BHL (Backhoe/ISO) pattern selected: boom and arm functions are swapped between left and right joysticks. Travel controls stay unchanged.';
+    }
+
+    if (e.vjoyLeftH) e.vjoyLeftH.textContent = 'SWING';
+    if (e.vjoyLeftV) e.vjoyLeftV.textContent = isSAE ? 'ARM' : 'BOOM';
+    if (e.vjoyRightH) e.vjoyRightH.textContent = 'BKT';
+    if (e.vjoyRightV) e.vjoyRightV.textContent = isSAE ? 'BOOM' : 'ARM';
   }
 
   /* ── Tutorial ─────────────────────────────────────────────── */

@@ -369,6 +369,48 @@ html, body {
 
 .ref-body { padding: 24px; }
 
+.pattern-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  margin-bottom: 16px;
+}
+
+.pattern-switch-label {
+  font: 600 11px var(--font-mono);
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pattern-switch-buttons {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.pattern-btn {
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  padding: 6px 12px;
+  font: 600 12px var(--font-mono);
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.pattern-btn.active {
+  background: var(--sany-yellow);
+  color: #000;
+}
+
 .ref-section h3 {
   font-size: 14px;
   text-transform: uppercase;

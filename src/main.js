@@ -7,7 +7,6 @@
 
 import './style.css';
 import { World }        from './World.js';
-import { Excavator }    from './Excavator.js';
 import { InputManager } from './InputManager.js';
 import { LevelManager } from './LevelManager.js';
 import { UIManager }    from './UIManager.js';
@@ -27,6 +26,7 @@ class App {
     this.input   = new InputManager();
     this.levels  = new LevelManager();
     this.ui      = new UIManager(this.levels);
+    this.ui.setControlPattern(this.input.getControlPattern());
 
     /* ── Wire events ──────────────────────────────────────────── */
     this.ui.on('levelSelect', id => {
@@ -38,6 +38,10 @@ class App {
         this._active = false;
         this.ui.showLevelSelect();
       }
+    });
+    this.ui.on('controlPatternChange', pattern => {
+      this.input.setControlPattern(pattern);
+      this.ui.setControlPattern(pattern);
     });
 
     this.levels.on('levelComplete', id => {
@@ -99,14 +103,15 @@ class App {
 
       /* Show initial hint based on controls needed */
       const ctrl = level.controls || [];
+      const pattern = this.input.getControlPattern();
       if (ctrl.includes('travel')) {
         this.ui.showHint('Use W/S to drive, A/D to turn', 5000);
       } else if (ctrl.includes('swing')) {
         this.ui.showHint('Use ←/→ Arrow keys to swing', 5000);
       } else if (ctrl.includes('boom')) {
-        this.ui.showHint('Use I/K to raise/lower boom', 5000);
+        this.ui.showHint(pattern === 'SAE' ? 'Use I/K to raise/lower boom' : 'Use ↑/↓ Arrow keys to raise/lower boom', 5000);
       } else if (ctrl.includes('arm')) {
-        this.ui.showHint('Use ↑/↓ Arrow keys to extend/retract arm', 5000);
+        this.ui.showHint(pattern === 'SAE' ? 'Use ↑/↓ Arrow keys to extend/retract arm' : 'Use I/K to extend/retract arm', 5000);
       } else if (ctrl.includes('bucket')) {
         this.ui.showHint('Use J/L to curl/dump bucket', 5000);
       }
@@ -134,6 +139,13 @@ class App {
     /* Camera toggle */
     if (inputState.cameraToggle) {
       this.world.toggleCameraMode();
+    }
+
+    if (inputState.controlPatternToggle) {
+      const nextPattern = inputState.controlPattern === 'SAE' ? 'BHL' : 'SAE';
+      this.input.setControlPattern(nextPattern);
+      this.ui.setControlPattern(nextPattern);
+      this.ui.showHint(`Control pattern switched to ${nextPattern}`, 2500);
     }
 
     /* Pause on ESC */

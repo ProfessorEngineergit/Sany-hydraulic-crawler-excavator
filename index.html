@@ -39,7 +39,7 @@
       <div class="ls-title-block">
         <span class="ls-brand">SANY SY265C9C6K</span>
         <h1 class="ls-title">Operator Training Simulator</h1>
-        <p class="ls-subtitle">26,500 kg · Hydraulic Crawler Excavator · SAE Control Pattern</p>
+        <p class="ls-subtitle">26,500 kg · Hydraulic Crawler Excavator · <span id="ls-pattern-text">SAE</span> Control Pattern</p>
       </div>
       <button id="ls-controls-btn" class="btn-ghost">Controls Reference</button>
     </header>
@@ -71,26 +71,33 @@
         <button class="btn-close" id="close-controls-ref">✕</button>
       </div>
       <div class="ref-body">
+        <div class="pattern-switch">
+          <span class="pattern-switch-label">Control Pattern</span>
+          <div class="pattern-switch-buttons">
+            <button id="pattern-sae-btn" class="pattern-btn active">SAE</button>
+            <button id="pattern-bhl-btn" class="pattern-btn">BHL</button>
+          </div>
+        </div>
         <div class="ref-section">
-          <h3>SAE Control Pattern (Standard)</h3>
+          <h3 id="controls-pattern-title">SAE Control Pattern (Standard)</h3>
           <div class="control-grid">
             <div class="control-joystick">
               <div class="joy-label">LEFT JOYSTICK</div>
               <div class="joy-diagram">
-                <div class="joy-dir joy-up">ARM OUT<br/><kbd>↑</kbd></div>
-                <div class="joy-dir joy-down">ARM IN<br/><kbd>↓</kbd></div>
-                <div class="joy-dir joy-left">SWING L<br/><kbd>←</kbd></div>
-                <div class="joy-dir joy-right">SWING R<br/><kbd>→</kbd></div>
+                <div class="joy-dir joy-up"><span id="ctrl-left-up-action">ARM OUT</span><br/><kbd>↑</kbd></div>
+                <div class="joy-dir joy-down"><span id="ctrl-left-down-action">ARM IN</span><br/><kbd>↓</kbd></div>
+                <div class="joy-dir joy-left"><span id="ctrl-left-left-action">SWING L</span><br/><kbd>←</kbd></div>
+                <div class="joy-dir joy-right"><span id="ctrl-left-right-action">SWING R</span><br/><kbd>→</kbd></div>
                 <div class="joy-center"></div>
               </div>
             </div>
             <div class="control-joystick">
               <div class="joy-label">RIGHT JOYSTICK</div>
               <div class="joy-diagram">
-                <div class="joy-dir joy-up">BOOM UP<br/><kbd>I</kbd></div>
-                <div class="joy-dir joy-down">BOOM DN<br/><kbd>K</kbd></div>
-                <div class="joy-dir joy-left">BKT CURL<br/><kbd>J</kbd></div>
-                <div class="joy-dir joy-right">BKT DUMP<br/><kbd>L</kbd></div>
+                <div class="joy-dir joy-up"><span id="ctrl-right-up-action">BOOM UP</span><br/><kbd>I</kbd></div>
+                <div class="joy-dir joy-down"><span id="ctrl-right-down-action">BOOM DN</span><br/><kbd>K</kbd></div>
+                <div class="joy-dir joy-left"><span id="ctrl-right-left-action">BKT DUMP</span><br/><kbd>J</kbd></div>
+                <div class="joy-dir joy-right"><span id="ctrl-right-right-action">BKT CURL</span><br/><kbd>L</kbd></div>
                 <div class="joy-center"></div>
               </div>
             </div>
@@ -124,6 +131,9 @@
                   <kbd>C</kbd><span>Toggle camera view</span>
                 </div>
                 <div class="travel-row">
+                  <kbd>P</kbd><span>Toggle SAE / BHL pattern</span>
+                </div>
+                <div class="travel-row">
                   <kbd>H</kbd><span>Horn</span>
                 </div>
                 <div class="travel-row">
@@ -140,8 +150,8 @@
           </div>
         </div>
         <div class="ref-note">
-          <strong>Note:</strong> The Sany SY265C9C6K uses the SAE (Society of Automotive Engineers) control pattern as standard. 
-          ISO pattern can be selected via the machine's monitor — Section 4.1, Page 4-2.
+          <strong>Note:</strong> <span id="controls-pattern-note">The Sany SY265C9C6K uses the SAE (Society of Automotive Engineers) control pattern as standard. 
+          ISO/BHL pattern can be selected via the machine's monitor — Section 4.1, Page 4-2.</span>
         </div>
       </div>
       <div class="ref-footer">
@@ -223,8 +233,8 @@
           <div class="vjoy-dot" id="vjoy-left-dot"></div>
         </div>
         <div class="vjoy-axes">
-          <span id="vjoy-left-h">ARM</span>
-          <span id="vjoy-left-v">SWING</span>
+          <span id="vjoy-left-h">SWING</span>
+          <span id="vjoy-left-v">ARM</span>
         </div>
       </div>
       <div class="vjoy" id="vjoy-right">
@@ -233,8 +243,8 @@
           <div class="vjoy-dot" id="vjoy-right-dot"></div>
         </div>
         <div class="vjoy-axes">
-          <span id="vjoy-right-h">BOOM</span>
-          <span id="vjoy-right-v">BKT</span>
+          <span id="vjoy-right-h">BKT</span>
+          <span id="vjoy-right-v">BOOM</span>
         </div>
       </div>
     </div>

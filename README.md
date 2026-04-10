@@ -1,6 +1,6 @@
 # Sany SY265C9C6K — Hydraulic Crawler Excavator Simulator
 
-A **hyperrealistic 3D training simulator** for the **Sany SY265C9C6K** hydraulic crawler excavator, built with [Three.js](https://threejs.org/) in the style of Bruno Simon. All controls match the real machine's SAE pattern. 20 progressive levels from machine overview to a precision square-hole challenge.
+A **hyperrealistic 3D training simulator** for the **Sany SY265C9C6K** hydraulic crawler excavator, built with [Three.js](https://threejs.org/) in the style of Bruno Simon. Controls support **SAE** and **BHL (ISO)** pattern switching. 20 progressive levels from machine overview to a precision square-hole challenge.
 
 ---
 
@@ -24,14 +24,15 @@ A **hyperrealistic 3D training simulator** for the **Sany SY265C9C6K** hydraulic
 
 | Input | Action |
 |-------|--------|
-| `↑ / ↓` | Arm extend / retract (Left joystick Y) |
+| `↑ / ↓` | Left joystick Y (SAE: Arm, BHL: Boom) |
 | `← / →` | Swing left / right (Left joystick X) |
-| `I / K` | Boom up / down (Right joystick Y) |
+| `I / K` | Right joystick Y (SAE: Boom, BHL: Arm) |
 | `J / L` | Bucket curl / dump (Right joystick X) |
 | `W / S` | Both tracks forward / reverse |
 | `A / D` | Differential turn left / right |
 | `Q / E` | Counter-rotate left / right |
 | `C` | Toggle orbit / operator camera |
+| `P` | Toggle SAE/BHL control pattern |
 | `H` | Horn |
 | `ESC` | Pause menu |
 | Mouse drag | Orbit camera |
