@@ -627,7 +627,8 @@ export function getLevelById(id) {
 export function getUnlockedLevels(completedIds) {
   return LEVELS.map(l => ({
     ...l,
-    unlocked: l.id === 1 || completedIds.has(l.id - 1),
+    unlocked: true,
+    locked: false,
     completed: completedIds.has(l.id),
   }));
 }
