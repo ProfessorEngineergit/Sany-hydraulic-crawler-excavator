@@ -46,7 +46,7 @@ export class LevelManager {
   }
 
   isUnlocked(id) {
-    return id === 1 || this._completedIds.has(id - 1);
+    return this.getLevel(id) !== null;
   }
 
   isCompleted(id) {
