@@ -9,6 +9,7 @@ export class UIManager {
     this._tutSkip    = false;
     this._currentLevel = null;
     this._hudActive    = false;
+    this._inputMode    = 'keyboard';
 
     /* Cached DOM refs */
     this._els = {
@@ -85,6 +86,16 @@ export class UIManager {
       hudHint:          document.getElementById('hud-hint'),
       hudHintText:      document.getElementById('hud-hint-text'),
 
+      hudInputModeBtn:   document.getElementById('hud-input-mode-btn'),
+      hudInputModeIcon:  document.getElementById('hud-input-mode-icon'),
+      hudInputModeLabel: document.getElementById('hud-input-mode-label'),
+
+      touchJoyLeft:       document.getElementById('touch-joy-left'),
+      touchJoyRight:      document.getElementById('touch-joy-right'),
+      touchDpad:          document.getElementById('touch-dpad'),
+      touchJoyLabelLeft:  document.getElementById('touch-joy-label-left'),
+      touchJoyLabelRight: document.getElementById('touch-joy-label-right'),
+
       pauseMenu:        document.getElementById('pause-menu'),
       pauseLevelName:   document.getElementById('pause-level-name'),
       pauseResume:      document.getElementById('pause-resume'),
@@ -139,6 +150,12 @@ export class UIManager {
     e.closeCtrlRef2?.addEventListener('click', () => this.hideControlsRef());
     e.patternSAEBtn?.addEventListener('click', () => this._emit('controlPatternChange', 'SAE'));
     e.patternBHLBtn?.addEventListener('click', () => this._emit('controlPatternChange', 'BHL'));
+
+    /* Input mode toggle (HUD top bar) */
+    e.hudInputModeBtn?.addEventListener('click', () => {
+      const next = this._inputMode === 'keyboard' ? 'touch' : 'keyboard';
+      this._emit('inputModeChange', next);
+    });
 
     /* Tutorial */
     e.tutClose?.addEventListener('click',   () => this._emitTutorialDone());
@@ -291,6 +308,38 @@ export class UIManager {
     if (e.vjoyLeftV) e.vjoyLeftV.textContent = isSAE ? 'ARM' : 'BOOM';
     if (e.vjoyRightH) e.vjoyRightH.textContent = 'BKT';
     if (e.vjoyRightV) e.vjoyRightV.textContent = isSAE ? 'BOOM' : 'ARM';
+
+    /* Update touch joystick axis labels */
+    if (e.touchJoyLabelLeft)  e.touchJoyLabelLeft.textContent  = isSAE ? 'ARM / SWING'  : 'BOOM / SWING';
+    if (e.touchJoyLabelRight) e.touchJoyLabelRight.textContent = isSAE ? 'BOOM / BKT'   : 'ARM / BKT';
+  }
+
+  /* ── Input Mode (keyboard vs touch) ───────────────────────── */
+  setInputMode(mode) {
+    this._inputMode = (mode === 'touch') ? 'touch' : 'keyboard';
+    const isTouch = this._inputMode === 'touch';
+    const e = this._els;
+
+    /* Toggle button appearance */
+    if (e.hudInputModeIcon)  e.hudInputModeIcon.textContent  = isTouch ? '🕹️' : '⌨️';
+    if (e.hudInputModeLabel) e.hudInputModeLabel.textContent = isTouch ? 'TOUCH' : 'KB';
+    if (e.hudInputModeBtn)   e.hudInputModeBtn.classList.toggle('active', isTouch);
+
+    /* Show/hide touch pads */
+    const show = (el) => el?.classList.remove('hidden');
+    const hide = (el) => el?.classList.add('hidden');
+    if (isTouch) {
+      show(e.touchJoyLeft);
+      show(e.touchJoyRight);
+      show(e.touchDpad);
+    } else {
+      hide(e.touchJoyLeft);
+      hide(e.touchJoyRight);
+      hide(e.touchDpad);
+    }
+
+    /* Toggle HUD class so CSS can reposition panels in touch mode */
+    document.getElementById('hud')?.classList.toggle('touch-mode', isTouch);
   }
 
   /* ── Tutorial ─────────────────────────────────────────────── */

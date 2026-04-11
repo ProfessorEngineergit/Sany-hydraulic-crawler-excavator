@@ -27,6 +27,7 @@ class App {
     this.levels  = new LevelManager();
     this.ui      = new UIManager(this.levels);
     this.ui.setControlPattern(this.input.getControlPattern());
+    this.ui.setInputMode(this.input.getInputMode());
 
     /* ── Wire events ──────────────────────────────────────────── */
     this.ui.on('levelSelect', id => {
@@ -42,6 +43,12 @@ class App {
     this.ui.on('controlPatternChange', pattern => {
       this.input.setControlPattern(pattern);
       this.ui.setControlPattern(pattern);
+    });
+    this.ui.on('inputModeChange', mode => {
+      this.input.setInputMode(mode);
+      this.ui.setInputMode(mode);
+      const label = mode === 'touch' ? 'Touch Joysticks' : 'Keyboard / Gamepad';
+      this.ui.showHint(`Input: ${label}`, 2500);
     });
 
     this.levels.on('levelComplete', id => {

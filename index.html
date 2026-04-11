@@ -199,6 +199,10 @@
         <span class="hud-level-num" id="hud-level-num">Level 1</span>
         <span class="hud-level-name" id="hud-level-name">Meet the Machine</span>
       </div>
+      <button class="hud-input-mode-btn" id="hud-input-mode-btn" title="Toggle input mode (Keyboard / Touch)">
+        <span class="hud-input-mode-icon" id="hud-input-mode-icon">⌨️</span>
+        <span class="hud-input-mode-label" id="hud-input-mode-label">KB</span>
+      </button>
       <div class="hud-objective">
         <span class="hud-obj-label">OBJECTIVE</span>
         <span class="hud-obj-text" id="hud-obj-text"></span>
@@ -302,6 +306,36 @@
     <div class="hud-hint hidden" id="hud-hint">
       <span class="hint-icon">💡</span>
       <span id="hud-hint-text"></span>
+    </div>
+
+    <!-- ─── Touch Joystick Pads (shown in touch mode) ─────────── -->
+    <div id="touch-joy-left" class="touch-joy-pad hidden" aria-label="Left joystick">
+      <div class="touch-joy-ring">
+        <div class="touch-joy-knob" id="touch-joy-knob-left"></div>
+      </div>
+      <div class="touch-joy-label" id="touch-joy-label-left">ARM / SWING</div>
+    </div>
+
+    <div id="touch-dpad" class="touch-dpad hidden" aria-label="Travel controls">
+      <div class="dpad-label">TRAVEL</div>
+      <div class="dpad-grid">
+        <div></div>
+        <button class="dpad-btn" id="dpad-up" aria-label="Forward">▲</button>
+        <div></div>
+        <button class="dpad-btn" id="dpad-left"  aria-label="Turn left">◀</button>
+        <div class="dpad-center"></div>
+        <button class="dpad-btn" id="dpad-right" aria-label="Turn right">▶</button>
+        <div></div>
+        <button class="dpad-btn" id="dpad-down"  aria-label="Reverse">▼</button>
+        <div></div>
+      </div>
+    </div>
+
+    <div id="touch-joy-right" class="touch-joy-pad hidden" aria-label="Right joystick">
+      <div class="touch-joy-ring">
+        <div class="touch-joy-knob" id="touch-joy-knob-right"></div>
+      </div>
+      <div class="touch-joy-label" id="touch-joy-label-right">BOOM / BKT</div>
     </div>
 
   </div>
